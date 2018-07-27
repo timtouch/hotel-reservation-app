@@ -13,7 +13,7 @@ public class ConnectionUtil
     public static Connection getConnection() throws SQLException, IOException
     {
         Properties prop = new Properties();
-        InputStream in = new FileInputStream("../webapps/reservation-app/connection.properties");
+        InputStream in = new FileInputStream("connection.properties"); //"../webapps/reservation-app/connection.properties");
         prop.load(in);
 
         String url = prop.getProperty("url");
