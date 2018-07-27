@@ -1,5 +1,6 @@
 package com.revature.model;
 
+// TODO: Maybe remove the hotels...and focus on hotel rooms?
 public class Hotel
 {
     private int id;

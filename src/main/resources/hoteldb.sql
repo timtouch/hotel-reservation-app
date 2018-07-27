@@ -7,7 +7,7 @@ create table hotel_user (
     user_id number primary key,
     first_name varchar2(30) not null,
     last_name varchar2(30) not null,
-    email varchar2(100) not null,
+    email varchar2(100) unique not null,
     user_role varchar2(10) not null,
     hotel_managed number  -- A host attribute only
 )
@@ -161,9 +161,22 @@ begin
 end;
 /
 
+-- For deleting a reservation
+create or replace procedure delete_reservation(user_id in number, hotel_room_id in number, start_date in date, end_date in date) as
+begin
+    delete from reservation where reservation.user_id = user_id and reservation.hotel_room_id = hotel_room_id and reservation.start_date = start_date and reservation.end_date = end_date;
+    commit;
+end;
+/
 
 -- For resolving an issue (Updating the issue)
-
+create or replace procedure update_issue(created_by in number, created_on in timestamp, resolved_by in number, resolved_on in timestamp, is_resolved in number) as
+begin
+    update issue set issue.resolved_by = resolved_by, issue.resolved_on = resolved_on, issue.is_resolved = is_resolved
+        where issue.created_by = created_by and issue.created_on = created_on;
+    commit;
+end;
+/
 /* INSERTS */
 
 -- Hotels

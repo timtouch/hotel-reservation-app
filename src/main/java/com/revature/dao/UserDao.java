@@ -16,8 +16,9 @@ public class UserDao
     // Maybe make query to get all guest for a hotel?
 //    private static String getAllGuestsThatHasReservedInHotelQuery = "SELECT * FROM HOTEL_USER INNER JOIN USER_ACCOUNT ON HOTEL_USER.USER_ID = USER_ACCOUNT.USER_ID WHERE USER_ROLE = 'GUEST'";
 //    private static String getAllHostsForAHotelQuery = "SELECT * FROM HOTEL_USER INNER JOIN USER_ACCOUNT ON HOTEL_USER.USER_ID = USER_ACCOUNT.USER_ID WHERE USER_ROLE =  'HOST' WHERE HOTEL_ID = ?";
-    private static String getAllGuestsQuery = "SELECT * FROM HOTEL_USER INNER JOIN USER_ACCOUNT ON HOTEL_USER.USER_ID = USER_ACCOUNT.USER_ID WHERE USER_ROLE = 'GUEST'";
-    private static String getHotelUserByIdQuery = "SELECT * FROM HOTEL_USER WHERE USER_ID = ?";
+    private static String getAllGuestsQuery = "SELECT * FROM HOTEL_USER LEFT OUTER JOIN USER_ACCOUNT ON HOTEL_USER.USER_ID = USER_ACCOUNT.USER_ID WHERE USER_ROLE = 'GUEST'";
+    private static String getHotelUserByIdQuery = "SELECT * FROM HOTEL_USER INNER JOIN USER_ACCOUNT ON HOTEL_USER.USER_ID = USER_ACCOUNT.USER_ID WHERE HOTEL_USER.USER_ID = ?";
+    private static String getHotelUserByEmailQuery = "SELECT * FROM HOTEL_USER INNER JOIN USER_ACCOUNT ON HOTEL_USER.USER_ID = USER_ACCOUNT.USER_ID WHERE EMAIL = ?";
     private static String getHotelUserByUsernameQuery = "SELECT * FROM HOTEL_USER INNER JOIN USER_ACCOUNT ON HOTEL_USER.USER_ID = USER_ACCOUNT.USER_ID WHERE USERNAME = ?";
 
     private static String insertHotelHostCallable = "{CALL INSERT_HOST(?,?,?,?)}"; // (FIRST_NAME, LAST_NAME, EMAIL, MANAGED_HOTEL_ID)
@@ -38,7 +39,7 @@ public class UserDao
                 guest = (Guest) mapUserTableToObject(rs);
                 guestList.add(guest);
             }
-
+            rs.close();
         } catch (SQLException e)
         {
             e.printStackTrace();
@@ -62,6 +63,7 @@ public class UserDao
             while (rs.next()){
                 user = mapUserTableToObject(rs);
             }
+            rs.close();
         } catch (SQLException e)
         {
             e.printStackTrace();
@@ -72,7 +74,32 @@ public class UserDao
         return user;
     }
 
+    @SuppressWarnings("Duplicates")
+    public User getUserByEmail(String email){
+        User user = null;
 
+        try (Connection conn = ConnectionUtil.getConnection();
+            PreparedStatement ps = conn.prepareStatement(getHotelUserByEmailQuery))
+        {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                user = mapUserTableToObject(rs);
+            }
+            rs.close();
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return user;
+
+    }
+
+    @SuppressWarnings("Duplicates")
     public User getUserByUsername(String usrname) {
         User user = null;
 
@@ -86,6 +113,7 @@ public class UserDao
                 user = mapUserTableToObject(rs);
 
             }
+            rs.close();
         } catch (SQLException e)
         {
             e.printStackTrace();
@@ -106,7 +134,8 @@ public class UserDao
             cs.setString(3, host.getEmail());
             cs.setInt(4, host.getManagedHotelId());
 
-            return cs.execute();
+            cs.execute();
+            return true;
         } catch (SQLException e)
         {
             e.printStackTrace();
@@ -127,7 +156,8 @@ public class UserDao
             cs.setString(2, guest.getLastName());
             cs.setString(3, guest.getEmail());
 
-            return cs.execute();
+            cs.execute();
+            return true;
         } catch (SQLException e)
         {
             e.printStackTrace();
@@ -139,16 +169,17 @@ public class UserDao
         }
     }
 
-    public boolean insertUserAccount(String username, String password, User user){
+    public boolean insertUserAccount(String username, String password, int userId){
 
         try (Connection conn = ConnectionUtil.getConnection();
             CallableStatement cs = conn.prepareCall(insertUserAccountCallable))
         {
             cs.setString(1,username);
             cs.setString(2, password);
-            cs.setInt(3, user.getUserId());
+            cs.setInt(3, userId);
+            cs.execute();
 
-            return cs.execute();
+            return true;
         } catch (SQLException e)
         {
             e.printStackTrace();
@@ -174,11 +205,11 @@ public class UserDao
             String username = rs.getString("USERNAME");
             String password = rs.getString("USER_PASSWORD");
 
-            if (rs.getString("USER_ROLE") == "GUEST")
+            if (rs.getString("USER_ROLE").equals("GUEST"))
             {
                 user = new Guest(userId, firstName, lastName, email, username, password);
             } else {
-                int managedHotelId = rs.getInt("HOTEL_ID");
+                int managedHotelId = rs.getInt("HOTEL_MANAGED");
                 user = new Host(userId,firstName, lastName, email, username, password, managedHotelId);
             }
 
@@ -189,67 +220,4 @@ public class UserDao
 
         return user;
     }
- /*   public List<BankClient> getAllBankClients(int bankId){
-        PreparedStatement ps;
-        BankClient bankClient;
-
-        List<BankClient> bankClients = new ArrayList<>();
-
-        try (Connection conn = ConnectionUtil.getConnection())
-        {
-            ps = conn.prepareStatement(getAllBankClientsFromBankQuery);
-            ps.setInt(1,bankId);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()){
-                int id = rs.getInt("bankClient_id");
-                String firstName = rs.getString("first_name");
-                String lastName = rs.getString("last_name");
-                String email = rs.getString("email");
-                int ssn = rs.getInt("SSN");
-                String username = rs.getString("bankclient_username");
-                String password = rs.getString("bankclient_password");
-
-                bankClient = new BankClient(id, bankId, firstName, lastName, email, ssn, username, password);
-
-                bankClients.add(bankClient);
-            }
-
-            rs.close();
-            ps.close();
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return bankClients;
-    }
-
-    public void addBankClient(BankClient bankClient){
-        PreparedStatement ps;
-
-        try (Connection conn = ConnectionUtil.getConnection())
-        {
-            ps = conn.prepareStatement(createBankClientQuery);
-            ps.setInt(1, bankClient.getBankId());
-            ps.setString(2, bankClient.getFirstName());
-            ps.setString(3, bankClient.getLastName());
-            ps.setString(4, bankClient.getEmail());
-            ps.setInt(5, bankClient.getSSN());
-            ps.setString(6, bankClient.getUsername());
-            ps.setString(7, bankClient.getPassword());
-
-            ps.executeUpdate();
-
-            ps.close();
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }*/
 }

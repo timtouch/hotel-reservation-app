@@ -1,5 +1,6 @@
 package com.revature.model;
 
+// TODO: Add additional attributes to the hotel room
 public class HotelRoom
 {
     private int hotelRoomId;
