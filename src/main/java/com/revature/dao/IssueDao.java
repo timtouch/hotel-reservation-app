@@ -15,7 +15,7 @@ public class IssueDao
     private static String getAllUnresolvedIssuesQuery = "SELECT * FROM ISSUE WHERE IS_RESOLVED = 0";
     private static String getIssueQuery = "SELECT * FROM ISSUE WHERE CREATED_BY = ? AND CREATED_ON = ?";
     private static String insertIssueCallable = "{CALL INSERT_ISSUE(?,?)}"; //(CREATED_BY ID, MESSAGE)
-    private static String updateIssueCallable = "";
+    private static String updateIssueCallable = "{CALL UPDATE_ISSUE(?,?,?,?,?)}"; // (CREATED_BY, CREATED_ON, RESOLVED_BY, RESOLVED_ON, IS_RESOLVED)
 
     @SuppressWarnings("Duplicates")
     public List<Issue> getAllIssues(){
@@ -99,6 +99,29 @@ public class IssueDao
         {
             cs.setInt(1, createdBy);
             cs.setString(2, message);
+
+            cs.execute();
+            return true;
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateIssue(Issue issue){
+        try(Connection conn = ConnectionUtil.getConnection();
+            CallableStatement cs = conn.prepareCall(updateIssueCallable))
+        {
+            cs.setInt(1, issue.getCreatedById());
+            cs.setTimestamp(2, Timestamp.valueOf(issue.getCreatedOn()));
+            cs.setInt(3, issue.getResolverId());
+            cs.setTimestamp(4, Timestamp.valueOf(issue.getResolvedOn()));
+            cs.setInt(5, issue.isResolved() ? 1 : 0);
 
             cs.execute();
             return true;

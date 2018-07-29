@@ -1,23 +1,25 @@
 package com.revature.model;
 
-// TODO: Add additional attributes to the hotel room
+
 public class HotelRoom
 {
     private int hotelRoomId;
     private int roomNumber;
     private int hotelId;
     private String imageURL;
+    private int numOfBeds;
 
     public HotelRoom()
     {
     }
 
-    public HotelRoom(int hotelRoomId, int roomNumber, int hotelId, String imageURL)
+    public HotelRoom(int hotelRoomId, int roomNumber, int hotelId, String imageURL, int numOfBeds)
     {
         this.hotelRoomId = hotelRoomId;
         this.roomNumber = roomNumber;
         this.hotelId = hotelId;
         this.imageURL = imageURL;
+        this.numOfBeds = numOfBeds;
     }
 
     public int getHotelRoomId()
@@ -60,6 +62,16 @@ public class HotelRoom
         this.imageURL = imageURL;
     }
 
+    public int getNumOfBeds()
+    {
+        return numOfBeds;
+    }
+
+    public void setNumOfBeds(int numOfBeds)
+    {
+        this.numOfBeds = numOfBeds;
+    }
+
     @Override
     public String toString()
     {
@@ -68,6 +80,7 @@ public class HotelRoom
                 ", roomNumber=" + roomNumber +
                 ", hotelId=" + hotelId +
                 ", imageURL='" + imageURL + '\'' +
+                ", numOfBeds=" + numOfBeds +
                 '}';
     }
 }

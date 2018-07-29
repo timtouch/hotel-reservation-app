@@ -1,26 +1,29 @@
 package com.revature.model;
 
+
 import java.sql.Date;
 
 public class Reservation
 {
     private int userId;
-    private int hoteRoomId;
+    private int hotelRoomId;
     private Date startDate;
     private Date endDate;
     private ReservationStatus currentStatus;
+    private int numOfGuests;
 
     public Reservation()
     {
     }
 
-    public Reservation(int userId, int hoteRoomId, Date startDate, Date endDate, ReservationStatus currentStatus)
+    public Reservation(int userId, int hotelRoomId, Date startDate, Date endDate, ReservationStatus currentStatus, int numOfGuests)
     {
         this.userId = userId;
-        this.hoteRoomId = hoteRoomId;
+        this.hotelRoomId = hotelRoomId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.currentStatus = currentStatus;
+        this.numOfGuests = numOfGuests;
     }
 
     public int getUserId()
@@ -33,14 +36,14 @@ public class Reservation
         this.userId = userId;
     }
 
-    public int getHoteRoomId()
+    public int getHotelRoomId()
     {
-        return hoteRoomId;
+        return hotelRoomId;
     }
 
-    public void setHoteRoomId(int hoteRoomId)
+    public void setHotelRoomId(int hotelRoomId)
     {
-        this.hoteRoomId = hoteRoomId;
+        this.hotelRoomId = hotelRoomId;
     }
 
     public Date getStartDate()
@@ -73,15 +76,26 @@ public class Reservation
         this.currentStatus = currentStatus;
     }
 
+    public int getNumOfGuests()
+    {
+        return numOfGuests;
+    }
+
+    public void setNumOfGuests(int numOfGuests)
+    {
+        this.numOfGuests = numOfGuests;
+    }
+
     @Override
     public String toString()
     {
         return "Reservation{" +
                 "userId=" + userId +
-                ", hoteRoomId=" + hoteRoomId +
+                ", hotelRoomId=" + hotelRoomId +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", currentStatus=" + currentStatus +
+                ", numOfGuests=" + numOfGuests +
                 '}';
     }
 }
