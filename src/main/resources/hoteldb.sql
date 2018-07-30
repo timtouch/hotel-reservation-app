@@ -165,17 +165,17 @@ end;
 /
 
 -- For deleting a reservation
-create or replace procedure delete_reservation(user_id in number, hotel_room_id in number, start_date in date, end_date in date) as
+create or replace procedure delete_reservation(u_id in number, h_room_id in number, s_date in date, e_date in date) as
 begin
-    delete from reservation where reservation.user_id = user_id and reservation.hotel_room_id = hotel_room_id and reservation.start_date = start_date and reservation.end_date = end_date;
+    delete from reservation where user_id = u_id and hotel_room_id = h_room_id and start_date = s_date and end_date = e_date;
     commit;
 end;
 /
 
 -- For updating a hotel_room
-create or replace procedure update_hotel_room(hotel_room_id in number, room_number in number, image_url in varchar2, num_of_beds in number) as
+create or replace procedure update_hotel_room(hotel_room_id in number, room_number in number, hotel_id in number, image_url in varchar2, num_of_beds in number) as
 begin
-    update hotel_room set hotel_room.room_number = room_number, hotel_room.image_url = image_url, hotel_room.num_of_beds = num_of_beds where hotel_room.hotel_room_id = hotel_room_id;
+    update hotel_room set hotel_room.room_number = room_number, hotel_room.hotel_id = hotel_id, hotel_room.image_url = image_url, hotel_room.num_of_beds = num_of_beds where hotel_room.hotel_room_id = hotel_room_id;
     commit;
 end;
 /
@@ -186,6 +186,7 @@ begin
     update issue set issue.resolved_by = resolved_by, issue.resolved_on = resolved_on, issue.is_resolved = is_resolved
         where issue.created_by = created_by and issue.created_on = created_on;
     commit;
+    EXCEPTION WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('Error: ' || SQLCODE || ' - ' || SQLERRM);
 end;
 /
 
@@ -222,8 +223,7 @@ insert into issue(created_by, message) values (1, 'Shower curtain is missing');
 -- Reservations
 insert into reservation(user_id, hotel_room_id, start_date, end_date, current_status, num_of_guests) values(1, 1, to_date('12/23/1999','mm/dd/yyyy'), to_date('12/25/1999', 'mm/dd/yyyy'), 'PENDING', 1); 
 insert into reservation(user_id, hotel_room_id, start_date, end_date, current_status, num_of_guests) values(1, 1, to_date('12/23/1998','mm/dd/yyyy'), to_date('12/25/1998', 'mm/dd/yyyy'), 'APPROVED', 2); 
-
-
+commit;
 -- Select statements
 select * from hotel;
 select * from hotel_room;
@@ -233,5 +233,6 @@ select * from reservation;
 select * from status;
 select * from user_account;
 select * from user_role;
+
 
 commit;

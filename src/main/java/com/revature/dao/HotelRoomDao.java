@@ -1,6 +1,5 @@
 package com.revature.dao;
 
-import com.revature.model.Hotel;
 import com.revature.model.HotelRoom;
 import com.revature.util.ConnectionUtil;
 
@@ -13,9 +12,9 @@ public class HotelRoomDao
 {
     private static String getAllRoomsFromAHotelQuery = "SELECT * FROM HOTEL_ROOM WHERE HOTEL_ID = ?";
     private static String getARoomFromAHotelByRoomNumberQuery = "SELECT * FROM HOTEL_ROOM INNER JOIN HOTEL H on HOTEL_ROOM.HOTEL_ID = H.HOTEL_ID WHERE ROOM_NUMBER = ? AND H.HOTEL_ID = ?";
-    private static String getAHotelRoomByHotelRoomIdQuery = "SELECT * FROM HOTEL_ROOM WHERE HOTEL_ID = ?";
+    private static String getAHotelRoomByHotelRoomIdQuery = "SELECT * FROM HOTEL_ROOM WHERE HOTEL_ROOM_ID = ?";
     private static String insertHotelRoom = "{CALL INSERT_HOTEL_ROOM(?,?,?)}"; // (ROOM_NUMBER, HOTEL_ID, NUM_OF_BEDS)
-    private static String updateHotelRoom = "{CALL UPDATE_HOTEL_ROOM(?,?,?,?,?)}"; // (HOTEL_ROOM_ID, ROOM_NUMBER, HOTEL_ID, IMAGE_URL, NUM_OF_BEDS)
+    private static String updateHotelRoom = "UPDATE HOTEL_ROOM SET ROOM_NUMBER = ?, IMAGE_URL = ?, NUM_OF_BEDS = ? WHERE HOTEL_ROOM_ID = ?";
 
     public List<HotelRoom> getAllRoomsFromAHotel(int hotelId){
         HotelRoom hotelRoom;
@@ -83,6 +82,7 @@ public class HotelRoomDao
             while (rs.next()){
                 hotelRoom = mapHotelRoomTableToObject(rs);
             }
+            rs.close();
         } catch (SQLException e)
         {
             e.printStackTrace();
@@ -118,13 +118,13 @@ public class HotelRoomDao
         try(Connection conn = ConnectionUtil.getConnection();
             CallableStatement cs = conn.prepareCall(updateHotelRoom))
         {
-            cs.setInt(1, hotelRoom.getHotelRoomId());
-            cs.setInt(2, hotelRoom.getRoomNumber());
-            cs.setInt(3, hotelRoom.getHotelId());
-            cs.setString(4, hotelRoom.getImageURL());
-            cs.setInt(5, hotelRoom.getNumOfBeds());
+            cs.setInt(1, hotelRoom.getRoomNumber());
+            cs.setString(2, hotelRoom.getImageURL());
+            cs.setInt(3, hotelRoom.getNumOfBeds());
+            cs.setInt(4, hotelRoom.getHotelRoomId());
 
-            cs.execute();
+
+            cs.executeUpdate();
             return true;
         } catch (SQLException e)
         {

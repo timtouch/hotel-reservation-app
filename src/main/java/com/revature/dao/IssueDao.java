@@ -15,7 +15,7 @@ public class IssueDao
     private static String getAllUnresolvedIssuesQuery = "SELECT * FROM ISSUE WHERE IS_RESOLVED = 0";
     private static String getIssueQuery = "SELECT * FROM ISSUE WHERE CREATED_BY = ? AND CREATED_ON = ?";
     private static String insertIssueCallable = "{CALL INSERT_ISSUE(?,?)}"; //(CREATED_BY ID, MESSAGE)
-    private static String updateIssueCallable = "{CALL UPDATE_ISSUE(?,?,?,?,?)}"; // (CREATED_BY, CREATED_ON, RESOLVED_BY, RESOLVED_ON, IS_RESOLVED)
+    private static String updateIssueCallable = "update issue set resolved_by = ?, RESOLVED_ON = ?, is_resolved = ? where created_by = ? and created_on = ?"; // ( RESOLVED_BY, RESOLVED_ON, IS_RESOLVED, CREATED_BY, CREATED_ON)
 
     @SuppressWarnings("Duplicates")
     public List<Issue> getAllIssues(){
@@ -115,15 +115,17 @@ public class IssueDao
 
     public boolean updateIssue(Issue issue){
         try(Connection conn = ConnectionUtil.getConnection();
-            CallableStatement cs = conn.prepareCall(updateIssueCallable))
+            PreparedStatement ps = conn.prepareStatement(updateIssueCallable))
         {
-            cs.setInt(1, issue.getCreatedById());
-            cs.setTimestamp(2, Timestamp.valueOf(issue.getCreatedOn()));
-            cs.setInt(3, issue.getResolverId());
-            cs.setTimestamp(4, Timestamp.valueOf(issue.getResolvedOn()));
-            cs.setInt(5, issue.isResolved() ? 1 : 0);
 
-            cs.execute();
+            ps.setInt(1, issue.getResolverId());
+            ps.setTimestamp(2, Timestamp.valueOf(issue.getResolvedOn()));
+            ps.setInt(3, issue.isResolved() ? 1 : 0);
+            ps.setInt(4, issue.getCreatedById());
+            ps.setTimestamp(5, Timestamp.valueOf(issue.getCreatedOn()));
+
+            ps.executeUpdate();
+
             return true;
         } catch (SQLException e)
         {
@@ -143,7 +145,7 @@ public class IssueDao
             LocalDateTime createdOn = rs.getTimestamp("CREATED_ON").toLocalDateTime();
             String message = rs.getString("MESSAGE");
             int resolvedBy = rs.getInt("RESOLVED_BY");
-            LocalDateTime resolvedOn = rs.getTimestamp("RESOLVED_ON").toLocalDateTime();
+            LocalDateTime resolvedOn = rs.getTimestamp("RESOLVED_ON") != null ? rs.getTimestamp("RESOLVED_ON").toLocalDateTime() : null;
             // b/c oracle doesn't use boolean, it is represented in the db as a number that should either be 1 (true) or 0 (false)
             boolean isResolved = rs.getInt("IS_RESOLVED") == 1;
 

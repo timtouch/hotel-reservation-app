@@ -1,19 +1,25 @@
 package com.revature;
 
-import com.revature.dao.HotelDao;
-import com.revature.dao.UserDao;
-import com.revature.model.Hotel;
+import com.revature.dao.*;
+import com.revature.model.*;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main
 {
     public static void main(String[] args)
     {
+        // All the daos used
         UserDao userDao = new UserDao();
+        IssueDao issueDao = new IssueDao();
         HotelDao hotelDao = new HotelDao();
+        HotelRoomDao hotelRoomDao = new HotelRoomDao();
 
-        Hotel hotel = new Hotel();
-        hotel.setName("Hilton");
 
-        System.out.println(hotelDao.getHotelById(3));
     }
 }
