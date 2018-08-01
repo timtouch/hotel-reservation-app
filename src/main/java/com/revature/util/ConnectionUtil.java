@@ -1,5 +1,6 @@
 package com.revature.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,8 +13,9 @@ public class ConnectionUtil
 {
     public static Connection getConnection() throws SQLException, IOException
     {
+//        System.out.println(new File(".").getAbsolutePath());
         Properties prop = new Properties();
-        InputStream in = new FileInputStream("connection.properties"); //"../webapps/reservation-app/connection.properties");
+        InputStream in = new FileInputStream("../webapps/reservation-app/WEB-INF/connection.properties"); //"../webapps/reservation-app/connection.properties");
         prop.load(in);
 
         String url = prop.getProperty("url");

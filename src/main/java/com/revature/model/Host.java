@@ -1,5 +1,7 @@
 package com.revature.model;
 
+import com.revature.dao.HotelDao;
+
 public class Host extends User
 {
     private int managedHotelId;
@@ -22,6 +24,19 @@ public class Host extends User
     public void setManagedHotelId(int managedHotelId)
     {
         this.managedHotelId = managedHotelId;
+    }
+
+    @Override
+    public String validateNewUser()
+    {
+        HotelDao hotelDao = new HotelDao();
+        String message = super.validateNewUser();
+        if (message.isEmpty()){
+            if(hotelDao.getHotelById(this.managedHotelId) == null){
+                message = "No hotel with that id exists";
+            }
+        }
+        return message;
     }
 
     @Override

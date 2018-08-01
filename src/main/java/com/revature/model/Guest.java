@@ -1,5 +1,7 @@
 package com.revature.model;
 
+import com.revature.dao.UserDao;
+
 public class Guest extends User
 {
     public Guest()
@@ -10,6 +12,8 @@ public class Guest extends User
     {
         super(userId, firstName, lastName, email, username, password);
     }
+
+
 
     @Override
     public String toString()
