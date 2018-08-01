@@ -19,6 +19,7 @@ public class Main
         HotelDao hotelDao = new HotelDao();
         HotelRoomDao hotelRoomDao = new HotelRoomDao();
 
+        System.out.println(issueDao.getAllIssues());
 
     }
 }

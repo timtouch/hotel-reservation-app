@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Consider adding an id field to make searching easier
 public class IssueDao
 {
     private static String getAllIssuesForHotelQuery = "SELECT * FROM ISSUE";

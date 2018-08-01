@@ -26,8 +26,8 @@ public class HotelServlet extends HttpServlet
         List<Hotel> hotels;
         Hotel hotel;
 
-
         ObjectMapper mapper = new ObjectMapper();
+        resp.setContentType("application/json");
 
         if(req.getParameterMap().containsKey("id")){
             mapper.writeValue(resp.getOutputStream(), hotelDao.getHotelById(Integer.parseInt(req.getParameter("id"))));
