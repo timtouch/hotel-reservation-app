@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/api/guests")
+@WebServlet("/api/v1/guests")
 public class GuestServlet extends HttpServlet
 {
     @Override

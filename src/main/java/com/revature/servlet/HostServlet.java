@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/api/hosts")
+@WebServlet("/api/v1/hosts")
 public class HostServlet extends HttpServlet
 {
     // GET/hosts

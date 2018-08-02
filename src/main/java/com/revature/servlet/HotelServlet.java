@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/api/hotels")
+@WebServlet("/api/v1/hotels")
 public class HotelServlet extends HttpServlet
 {
     private HotelDao hotelDao = new HotelDao();

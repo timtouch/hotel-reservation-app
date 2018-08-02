@@ -2,6 +2,7 @@ package com.revature.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dao.ReservationDao;
+import com.revature.model.Issue;
 import com.revature.model.Reservation;
 
 import javax.servlet.ServletException;
@@ -10,11 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-@WebServlet("/api/reservations")
+@WebServlet("/api/v1/reservations")
 public class ReservationServlet extends HttpServlet
 {
     // GET /reservations?{hotelId}
@@ -59,6 +61,14 @@ public class ReservationServlet extends HttpServlet
                 mapper.writeValue(resp.getOutputStream(), reservations);
             }
 
+        } else {
+            resp.setContentType("text/plain");
+            PrintWriter out = resp.getWriter();
+            out.print("Proper endpoint formats are:  \n" +
+                    "    // GET /reservations?{hotelId}\n" +
+                    "    // GET /reservations?{hotelId}&{guestId}\n" +
+                    "    // GET /reservations?{guestId}\n" +
+                    "    // GET /reservations?{guestId}&{hotelRoomId}&{startDate}&{endDate}");
         }
 
     }
@@ -67,20 +77,41 @@ public class ReservationServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        super.doPost(req, resp);
+        ObjectMapper mapper = new ObjectMapper();
+        ReservationDao reservationDao = new ReservationDao();
+
+        Reservation insertReservation = mapper.readValue(req.getInputStream(), Reservation.class);
+
+        if(!reservationDao.insertReservation(insertReservation)){
+            resp.getWriter().println("Unable to insert reservation. Missing one of theses fields [userId, hotelRoomId, startDate, endDate, numOfGuests]");
+        }
     }
 
     // PUT /reservations
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        super.doPut(req, resp);
+        ObjectMapper mapper = new ObjectMapper();
+        ReservationDao reservationDao = new ReservationDao();
+
+        Reservation updateReservation = mapper.readValue(req.getInputStream(), Reservation.class);
+
+        if (!reservationDao.updateReservationStatus(updateReservation, updateReservation.getCurrentStatus())){
+            resp.getWriter().println("Could not update reservation");
+        }
     }
 
     // DELETE /reservations
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        super.doDelete(req, resp);
+        ObjectMapper mapper = new ObjectMapper();
+        ReservationDao reservationDao = new ReservationDao();
+
+        Reservation deleteReservation = mapper.readValue(req.getInputStream(), Reservation.class);
+
+        if(!reservationDao.deleteReservation(deleteReservation)){
+            resp.getWriter().println("Could not delete reservation");
+        }
     }
 }

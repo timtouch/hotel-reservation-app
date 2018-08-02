@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/api/login")
+@WebServlet("/api/v1/login")
 public class LoginServlet extends HttpServlet
 {
     @Override

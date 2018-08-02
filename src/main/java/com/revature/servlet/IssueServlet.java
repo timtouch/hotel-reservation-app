@@ -2,7 +2,7 @@ package com.revature.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.revature.dao.IssueDao;
 import com.revature.model.Issue;
 
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@WebServlet("/api/issues")
+@WebServlet("/api/v1/issues")
 public class IssueServlet extends HttpServlet
 {
     // GET /issues
@@ -25,7 +25,7 @@ public class IssueServlet extends HttpServlet
     {
         ObjectMapper mapper = new ObjectMapper();
 
-        mapper.registerModule(new JSR310Module());
+        mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         IssueDao issueDao = new IssueDao();
@@ -60,6 +60,7 @@ public class IssueServlet extends HttpServlet
             resp.getWriter().println("Unable to insert issue. Missing either a createdBy id or message");
         }
     }
+
 
     // TODO: make this easier for me, look into another TODO in IssuesDao
     @Override

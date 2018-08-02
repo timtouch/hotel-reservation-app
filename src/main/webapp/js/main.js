@@ -1,4 +1,4 @@
-function sendRequest(){
+function sendRequest(){
     let xhr = new XMLHttpRequest();
     let guest = {
 
