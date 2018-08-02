@@ -1,3 +1,6 @@
 /target
 *.properties
 /.idea
+.classpath
+.project
+.settings/

@@ -1,20 +1,18 @@
-function sendRequest(){
-    let xhr = new XMLHttpRequest();
-    let guest = {
+$(document).ready(function() {
 
-    };
+    // Check for click events on the navbar burger icon
+    $(".navbar-burger").click(function() {
 
-    xhr.onreadystatechange = function(){
-        if(xhr.readyState == 4) {
-            if(xhr.status = 200){
-                console.log(xhr.response);
-            }
-        }
-    }
-    xhr.open("POST", "api/login");
-    xhr.setRequestHeader("Content-type", "application/json");
+        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+        $(".navbar-burger").toggleClass("is-active");
+        $(".navbar-menu").toggleClass("is-active");
 
-    let json = JSON.stringify(guest);
+    });
 
-    xhr.send(json);
+    loadHomePage();
+});
+
+
+function clearActiveNavBars(){
+    $(".navbar-item").removeClass("is-active");
 }

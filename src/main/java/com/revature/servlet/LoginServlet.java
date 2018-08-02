@@ -15,12 +15,6 @@ import java.io.IOException;
 @WebServlet("/api/v1/login")
 public class LoginServlet extends HttpServlet
 {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-    {
-        resp.getWriter().println("Got the GET");
-    }
-
     // POST/login
     // For logging in
     @Override
@@ -44,11 +38,11 @@ public class LoginServlet extends HttpServlet
                     mapper.writeValue(resp.getOutputStream(), user);
                 } else {
                     resp.setContentType("text/plain");
-                    resp.getWriter().println("Username or password is incorrent.");
+                    resp.getWriter().println("Username or password is incorrect.");
                 }
             } else {
                 resp.setContentType("text/plain");
-                resp.getWriter().println("Username or password is incorrent.");
+                resp.getWriter().println("Username or password is incorrect.");
             }
         } else {
             resp.setContentType("text/plain");

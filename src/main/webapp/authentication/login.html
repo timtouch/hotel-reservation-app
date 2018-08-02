@@ -1,0 +1,34 @@
+<section class="hero">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <div class="column is-4 is-offset-4">
+                <h3 class="title has-text-grey">Login</h3>
+                <p class="subtitle has-text-grey">Please login to proceed.</p>
+                <div class="box">
+
+                    <div id="loginForm" action="/api/v1/login">
+                        <p id="errorMessage" class="help is-danger"></p>
+                        <div class="field">
+                            <div class="control">
+                                <label class="label">Username:</label>
+                                <input class="input is-large" type="text" id="username" name="username" required="required" placeholder="Your Username" autofocus="">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <label class="label">Password:</label>
+                                <input class="input is-large" type="password" id="password" name="password" required="required" placeholder="Your Password">
+                            </div>
+                        </div>
+
+                        <button class="button is-block is-info is-large is-fullwidth" type="button" onclick="userSession.login()">Login</button>
+                    </div>
+                </div>
+                <p class="has-text-grey">
+                    <a onclick="loadRegisterPage()" href="#register">Sign Up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
