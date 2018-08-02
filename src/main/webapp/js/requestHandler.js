@@ -42,6 +42,74 @@ function getGuests(){
     xhr.send();
 }
 
+
+/**
+ * Get the logged in user's reservation
+ */
+function getUsersReservations(callback){
+    let xhr = new XMLHttpRequest();
+    let parameters = `?guestId=${userSession.getLoggedInClient().userId}&hotelId=${hotel.hotelId}`;
+    let reservations;
+
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200){
+                try{
+                    reservations = JSON.parse(xhr.responseText);
+                    console.log(reservations);
+                    if(typeof callback === 'function'){
+                        callback(reservations);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                console.log("I screwed up!");
+            }
+        }
+    };
+
+    xhr.open("GET", apiEndpoint + "reservations" + parameters);
+    xhr.setRequestHeader("Content-type", "application/json");
+
+    xhr.send();
+}
+
+/**
+ * Gets all issues
+ * @param callback (issues)
+ */
+function getIssues(callback){
+    let xhr = new XMLHttpRequest();
+    let parameters = "";
+    let issues;
+
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200){
+                try{
+                    issues = JSON.parse(xhr.responseText);
+                    console.log(issues);
+                    if (typeof callback === 'function'){
+                        callback(issues);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                console.log("I screwed up!");
+            }
+        }
+    };
+
+    xhr.open("GET", apiEndpoint + "issues" + parameters);
+    xhr.setRequestHeader("Content-type", "application/json");
+
+    xhr.send();
+}
+
 function getLoginUser(){
     let xhr = new XMLHttpRequest();
     let user = {};
@@ -117,21 +185,33 @@ function registerNewUser(){
     xhr.send(json);
 }
 
-// /* attach a submit handler to the form */
-// $("#loginForm").submit(function (event){
-//
-//     /* stop form from submitting normally */
-//    event.preventDefault();
-//
-//     /* get the action attribute from the <form action=""> element */
-//    var $form = $(this),
-//        url = $form.attr('action');
-//
-//     /* Send the data using post with element id name and name2*/
-//     var posting = $.post(url, { username: $('#username').val(), password: $('#password').val() } );
-//
-//     /* Alerts the results */
-//     posting.done(function (data){
-//         alert('success');
-//     });
-// });
+function getAllHotelRooms(callback){
+    let xhr = new XMLHttpRequest();
+    let parameters = `?hotelId=${hotel.hotelId}`;
+    let hotelRooms;
+
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200){
+                try{
+                    hotelRooms = JSON.parse(xhr.responseText);
+                    console.log(hotelRooms);
+                    if (typeof callback === 'function'){
+                        callback(hotelRooms);
+                    }
+
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                console.log("I screwed up!");
+            }
+        }
+    };
+
+    xhr.open("GET", apiEndpoint + "hotelRooms" + parameters);
+    // xhr.setRequestHeader("Content-type", "application/json");
+
+    xhr.send();
+}

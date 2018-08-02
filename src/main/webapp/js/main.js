@@ -23,3 +23,13 @@ let hotel = {
 function clearActiveNavBars(){
     $(".navbar-item").removeClass("is-active");
 }
+
+/**
+ *
+ */
+function openModal(){
+    $(".modal").addClass("is-active");
+    $(".modal-close").click(function(){
+       $(".modal").removeClass("is-active");
+    });
+}

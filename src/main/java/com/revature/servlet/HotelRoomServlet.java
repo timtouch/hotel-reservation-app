@@ -89,4 +89,5 @@ public class HotelRoomServlet extends HttpServlet
             resp.getWriter().println("Could not update the hotel. Needs a room number, hotel id,  image url, and number of beds.");
         }
     }
+
 }

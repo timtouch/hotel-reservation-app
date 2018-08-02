@@ -62,6 +62,7 @@ public class IssueServlet extends HttpServlet
     }
 
 
+    // Update issue, usually for resolving issues
     // TODO: make this easier for me, look into another TODO in IssuesDao
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException

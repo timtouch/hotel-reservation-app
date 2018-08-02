@@ -8,3 +8,58 @@
         </h2>
     </div>
 </section>
+<div class="columns">
+    <div class="column is-6">
+        <h2 class="subtitle">Reservations</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Hotel Room</th>
+                <th>Number of Guests</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Reservation Status</th>
+            </tr>
+            </thead>
+            <tbody id="reservations">
+            <!--<tr><td></td></tr>-->
+            </tbody>
+        </table>
+        <button value="Make Reservation" onclick="openModal()"></button>
+    </div>
+    <div class="column is-6">
+        <h2 class="subtitle">Submitted Issues</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Created On</th>
+                <th>Message</th>
+                <th>Resolved By</th>
+                <th>Resolved On</th>
+                <th>Is Resolved</th>
+            </tr>
+            </thead>
+            <tbody id="issues">
+            <!--<tr><td></td></tr>-->
+            </tbody>
+        </table>
+        <button value="Create Issue" onclick=""></button>
+    </div>
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Modal title</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <!-- Content ... -->
+                <h1>Stuff in here</h1>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success">Save changes</button>
+                <button class="button">Cancel</button>
+            </footer>
+        </div>
+    </div>
+</div>
