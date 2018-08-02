@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: The other queries
+// TODO: Create an id for this too?
 public class ReservationDao
 {
     private static String getAllReservationsForHotelQuery = "SELECT * FROM RESERVATION INNER JOIN HOTEL_ROOM ON RESERVATION.HOTEL_ROOM_ID = HOTEL_ROOM.HOTEL_ROOM_ID INNER JOIN HOTEL H on HOTEL_ROOM.HOTEL_ID = H.HOTEL_ID WHERE H.HOTEL_ID = ? ";

@@ -1,6 +1,8 @@
 package com.revature.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.revature.dao.IssueDao;
 import com.revature.model.Issue;
 
@@ -22,15 +24,21 @@ public class IssueServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         ObjectMapper mapper = new ObjectMapper();
+
+        mapper.registerModule(new JSR310Module());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         IssueDao issueDao = new IssueDao();
         List<Issue> issues;
         Issue issue;
 
         resp.setContentType("application/json");
-        if (req.getParameterMap().containsKey("createdBy") && req.getParameterMap().containsKey("createdOn")){
+        if (req.getParameterMap().containsKey("createdBy") && req.getParameterMap().containsKey("createdOn"))
+        {
             issue = issueDao.getIssue(Integer.parseInt(req.getParameter("createdBy")), LocalDateTime.parse(req.getParameter("createdOn")));
             mapper.writeValue(resp.getOutputStream(), issue);
-        } else {
+        } else
+        {
             issues = issueDao.getAllIssues();
             mapper.writeValue(resp.getOutputStream(), issues);
         }
@@ -47,14 +55,26 @@ public class IssueServlet extends HttpServlet
 
         insertIssue = mapper.readValue(req.getInputStream(), Issue.class);
 
-        if(!issueDao.insertIssue(insertIssue.getCreatedById(), insertIssue.getMessage())){
+        if (!issueDao.insertIssue(insertIssue.getCreatedById(), insertIssue.getMessage()))
+        {
             resp.getWriter().println("Unable to insert issue. Missing either a createdBy id or message");
         }
     }
 
+    // TODO: make this easier for me, look into another TODO in IssuesDao
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        super.doPut(req, resp);
+        ObjectMapper mapper = new ObjectMapper();
+        IssueDao issueDao = new IssueDao();
+
+        Issue updatedIssue;
+
+        updatedIssue = mapper.readValue(req.getInputStream(), Issue.class);
+
+        if (!issueDao.updateIssue(updatedIssue))
+        {
+            resp.getWriter().println("Something went wrong when updating the issue");
+        }
     }
 }

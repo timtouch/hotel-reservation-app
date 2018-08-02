@@ -114,6 +114,8 @@ public class IssueDao
         }
     }
 
+    // TODO: Maybe make a resolve issue stored procedure
+    // Don't forget to name the variables something different
     public boolean updateIssue(Issue issue){
         try(Connection conn = ConnectionUtil.getConnection();
             PreparedStatement ps = conn.prepareStatement(updateIssueCallable))
