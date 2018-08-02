@@ -81,12 +81,10 @@ public class GuestServlet extends HttpServlet
             userDao.insertUserAccount(guest.getUsername(), guest.getPassword(), userDao.getUserByEmail(guest.getEmail()).getUserId());
         } else
         {
-            System.out.println(message);
+            resp.setContentType("text/plain");
+            resp.getWriter().println(message);
         }
 
-        System.out.println(userDao.getAllGuests());
-        // So they expect a JSON object to be in the response
-        resp.setContentType("application/json");
     }
 
 }

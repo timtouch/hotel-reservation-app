@@ -28,7 +28,6 @@ function getGuests(){
     console.log("Pressed the button!");
     xhr.onreadystatechange = function(){
         if(xhr.readyState == 4) {
-            console.log("Ready!");
             if(xhr.status == 200){
                 guests = JSON.parse(xhr.responseText);
                 console.log(guests);
@@ -55,22 +54,62 @@ function getLoginUser(){
 
     xhr.onreadystatechange = function(){
         if(xhr.readyState === 4) {
-            console.log("Ready!");
             if(xhr.status === 200){
                 try{
                     user = JSON.parse(xhr.responseText);
-                    console.log(user);
+                    userSession.setLoggedInClient(user);
+                    console.log(userSession.getLoggedInClient());
+                    loadGuestNavBar();
+                    loadGuestProfile();
                 } catch (e) {
+                    console.log(e);
                     document.getElementById("errorMessage").innerText = xhr.responseText;
-                    console.log(xhr.responseText);
                 }
             } else {
                 console.log("I screwed up!");
             }
         }
-    }
+    };
 
     xhr.open("POST", apiEndpoint + "login");
+    xhr.setRequestHeader("Content-type", "application/json");
+
+    let json = JSON.stringify(user);
+
+    xhr.send(json);
+}
+
+function registerNewUser(){
+    let xhr = new XMLHttpRequest();
+    let user = {};
+
+    user.role = "guest";
+    user.username = $("#username").val();
+    user.password = $("#password").val();
+    user.firstName = $("#firstName").val();
+    user.lastName = $('#lastName').val();
+    user.email = $("#email").val();
+
+    console.log(user);
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200){
+               let message = xhr.responseText;
+               if(message === ""){
+                   loadHomePage(function(){
+                       document.getElementById("successMessage").innerText = "Successfully registered";
+                   });
+               } else {
+                   document.getElementById("errorMessage").innerText = message;
+               }
+            } else {
+                console.log("I screwed up!");
+            }
+        }
+    };
+
+    xhr.open("POST", apiEndpoint + "guests");
     xhr.setRequestHeader("Content-type", "application/json");
 
     let json = JSON.stringify(user);

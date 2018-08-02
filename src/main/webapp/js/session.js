@@ -4,19 +4,20 @@ class LoginSession{
         this.loggedInClient = loggedInClient;
     }
 
-    /**
-     * Logs the client in
-     * @param username
-     * @param password
-     */
+
     login (){
-        this.loggedInClient = getLoginUser();
+        getLoginUser();
     }
 
     logout(){
         this.loggedInClient = null;
+        loadHomeNavBar();
+        loadHomePage();
     }
 
+    setLoggedInClient(client){
+        this.loggedInClient = client;
+    }
     getLoggedInClient(){
         return this.loggedInClient;
     }
@@ -27,4 +28,4 @@ class LoginSession{
 
 }
 
-let userSession = new LoginSession();
+let userSession = new LoginSession({});

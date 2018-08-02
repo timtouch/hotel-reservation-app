@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+    loadHomeNavBar();
+    loadHomePage();
+
+
     // Check for click events on the navbar burger icon
     $(".navbar-burger").click(function() {
 
@@ -9,9 +13,12 @@ $(document).ready(function() {
 
     });
 
-    loadHomePage();
 });
 
+let hotel = {
+    hotelId: 1,
+    name: "Hotel California"
+};
 
 function clearActiveNavBars(){
     $(".navbar-item").removeClass("is-active");
