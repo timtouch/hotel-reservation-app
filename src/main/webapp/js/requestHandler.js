@@ -6,12 +6,12 @@ function getGuests(){
 
     console.log("Pressed the button!");
     xhr.onreadystatechange = function(){
-        if(xhr.readyState == 4) {
-            if(xhr.status == 200){
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200){
                 guests = JSON.parse(xhr.responseText);
                 console.log(guests);
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong!");
             }
         }
     }
@@ -44,7 +44,7 @@ function getUsersReservations(callback){
                     console.log(e);
                 }
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong!");
             }
         }
     };
@@ -55,6 +55,88 @@ function getUsersReservations(callback){
     xhr.send();
 }
 
+function getAllReservations(callback){
+    let xhr = new XMLHttpRequest();
+    let parameters = `?hotelId=${hotel.hotelId}`;
+    let reservations;
+
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200){
+                try{
+                    reservations = JSON.parse(xhr.responseText);
+                    console.log(reservations);
+                    if(typeof callback === 'function'){
+                        callback(reservations);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                console.log("Something went wrong!");
+            }
+        }
+    };
+
+    xhr.open("GET", apiEndpoint + "reservations" + parameters);
+    xhr.setRequestHeader("Content-type", "application/json");
+
+    xhr.send();
+}
+
+function updateReservation(reservation){
+    let xhr = new XMLHttpRequest();
+
+    console.log("Update reservation: " + reservation);
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200){
+                loadHostReservations();
+            } else {
+                console.log("Something went wrong!");
+            }
+
+        }
+    };
+
+    xhr.open("PUT", apiEndpoint + "reservations");
+    xhr.setRequestHeader("Content-type", "application/json");
+
+    let json = JSON.stringify(reservation);
+
+    xhr.send(json);
+}
+
+function getAllGuests(callback){
+    let xhr = new XMLHttpRequest();
+    let guests;
+
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200){
+                try{
+                    guests = JSON.parse(xhr.responseText);
+                    console.log(guests);
+                    if(typeof callback === 'function'){
+                        callback(guests);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            } else {
+                console.log("Something went wrong!");
+            }
+        }
+    };
+
+    xhr.open("GET", apiEndpoint + "guests");
+    xhr.setRequestHeader("Content-type", "application/json");
+
+    xhr.send();
+}
 /**
  * Gets all issues
  * @param callback (issues)
@@ -70,7 +152,6 @@ function getIssues(callback){
             if(xhr.status === 200){
                 try{
                     issues = JSON.parse(xhr.responseText);
-                    console.log(issues);
                     if (typeof callback === 'function'){
                         callback(issues);
                     }
@@ -78,7 +159,7 @@ function getIssues(callback){
                     console.log(e);
                 }
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong!");
             }
         }
     };
@@ -88,6 +169,34 @@ function getIssues(callback){
 
     xhr.send();
 }
+
+/**
+ * Updates the issue to the database
+ * @param iss Issue to update
+ */
+function updateIssue(issue){
+    let xhr = new XMLHttpRequest();
+
+    console.log(issue);
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            if(xhr.status === 200){
+                loadHostIssues();
+            } else {
+                console.log("Something went wrong!");
+            }
+
+        }
+    };
+    xhr.open("PUT", apiEndpoint + "issues");
+    xhr.setRequestHeader("Content-type", "application/json");
+
+    let json = JSON.stringify(issue);
+
+    xhr.send(json);
+}
+
 
 function getLoginUser(){
     let xhr = new XMLHttpRequest();
@@ -106,18 +215,25 @@ function getLoginUser(){
                     user = JSON.parse(xhr.responseText);
                     userSession.setLoggedInClient(user);
                     console.log(userSession.getLoggedInClient());
-                    loadGuestNavBar();
-                    loadGuestProfile();
+                    if (user.role === "guest"){
+                        loadGuestNavBar();
+                        loadGuestDashboard();
+                    } else if (user.role === "host"){
+                        loadHostNavBar();
+                        loadHostDashboard();
+                    }
                 } catch (e) {
                     console.log(e);
                     document.getElementById("errorMessage").innerText = xhr.responseText;
                 }
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong!");
             }
+            $(".is-info").removeClass('is-loading');
         }
     };
 
+    $("button.is-info").addClass('is-loading');
     xhr.open("POST", apiEndpoint + "login");
     xhr.setRequestHeader("Content-type", "application/json");
 
@@ -151,7 +267,7 @@ function registerNewUser(){
                    document.getElementById("errorMessage").innerText = message;
                }
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong!");
             }
             $(".is-info").removeClass('is-loading');
         }
@@ -184,7 +300,7 @@ function getAllHotelRooms(callback){
                     console.log(e);
                 }
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong!");
             }
         }
     };

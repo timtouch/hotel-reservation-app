@@ -78,7 +78,9 @@ public class ReservationServlet extends HttpServlet
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         System.out.println("POST reservation");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setDateFormat(df);
         ReservationDao reservationDao = new ReservationDao();
 
         Reservation insertReservation = mapper.readValue(req.getInputStream(), Reservation.class);
@@ -92,10 +94,16 @@ public class ReservationServlet extends HttpServlet
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        System.out.println("PUT reservation");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setDateFormat(df);
+
         ReservationDao reservationDao = new ReservationDao();
 
         Reservation updateReservation = mapper.readValue(req.getInputStream(), Reservation.class);
+
+        System.out.println(updateReservation);
 
         if (!reservationDao.updateReservationStatus(updateReservation, updateReservation.getCurrentStatus())){
             resp.getWriter().println("Could not update reservation");
@@ -106,7 +114,9 @@ public class ReservationServlet extends HttpServlet
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd");
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setDateFormat(df);
         ReservationDao reservationDao = new ReservationDao();
 
         Reservation deleteReservation = mapper.readValue(req.getInputStream(), Reservation.class);

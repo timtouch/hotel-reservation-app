@@ -76,4 +76,100 @@ function populateReservationTableRow(reservation){
             <td>${reservation.currentStatus}</td>
         </tr>`
     );
-};
+}
+
+/**
+ * Populates a reservation table row
+ * @param reservation
+ */
+function populateHostReservationTableRow(reservation) {
+    let tableBody = document.getElementById('reservations');
+    let tableRow = document.createElement('tr');
+
+    let tableData = document.createElement('td');
+    let tableText = document.createTextNode(reservation.userId);
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    tableData = document.createElement('td');
+    tableText = document.createTextNode(reservation.hotelRoomId);
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    tableData = document.createElement('td');
+    tableText = document.createTextNode(reservation.numOfGuests);
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    tableData = document.createElement('td');
+    tableText = document.createTextNode(reservation.startDate);
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    tableData = document.createElement('td');
+    tableText = document.createTextNode(reservation.endDate);
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    tableData = document.createElement('td');
+    tableText = document.createTextNode(reservation.currentStatus);
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    if (reservation.currentStatus === "PENDING") {
+        tableData = document.createElement('td');
+        tableData.className += "level";
+
+        let buttonElement = document.createElement('button');
+        buttonElement.className += "level-item button is-success";
+        let btnTextNode = document.createTextNode('Approve');
+
+        buttonElement.appendChild(btnTextNode);
+        buttonElement.addEventListener('click', function () {
+            setReservationStatus(reservation, "APPROVED");
+        });
+
+        tableData.appendChild(buttonElement);
+
+
+        buttonElement = document.createElement('button');
+        buttonElement.className += "level-item button is-danger";
+        btnTextNode = document.createTextNode('Deny');
+
+
+        buttonElement.appendChild(btnTextNode);
+        buttonElement.addEventListener('click', function () {
+            setReservationStatus(reservation, "DENIED");
+        });
+
+        tableData.appendChild(buttonElement);
+        tableRow.appendChild(tableData);
+    }
+
+    tableBody.appendChild(tableRow);
+
+    // $('#reservations').append(
+    //     `<tr>
+    //         <td>${reservation.userId}</td>
+    //         <td>${reservation.hotelRoomId}</td>
+    //         <td>${reservation.numOfGuests}</td>
+    //         <td>${reservation.startDate}</td>
+    //         <td>${reservation.endDate}</td>
+    //         <td>${reservation.currentStatus}</td>
+    //         <td class="level">
+    //             <select class='level-item'>
+    //                 <option>Select</option>
+    //                 <option>APPROVED</option>
+    //                 <option>DENIED</option>
+    //             </select>
+    //             <button class="button level-item" onclick="setReservationStatus()">Submit</button>
+    //         </td>
+    //     </tr>`
+    // );
+}
+
+function setReservationStatus(reservation, status){
+    reservation.currentStatus = status;
+
+    updateReservation(reservation);
+}

@@ -202,7 +202,8 @@ public class ReservationDao
             ps.setDate(5, reservation.getEndDate());
 
 
-            return ps.executeUpdate() == 1;
+            ps.executeUpdate();
+            return true;
 
         } catch (SQLException e)
         {

@@ -1,3 +1,24 @@
+function loadHomeNavBar(){
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4) {
+            console.log("Ready!");
+            if(xhr.status == 200){
+                let htmlSection = xhr.responseText;
+                document.getElementById("navbar").innerHTML = htmlSection;
+                addNavBarBurgerToggle();
+                clearActiveNavBars();
+            } else {
+                console.log("Something went wrong");
+            }
+        }
+    }
+
+    xhr.open("GET", "navbar.html");
+
+    xhr.send();
+}
+
 function loadHomePage(callback){
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(){
@@ -152,7 +173,8 @@ function loadGuestNavBar(){
     xhr.send();
 }
 
-function loadHomeNavBar(){
+
+function loadHostNavBar(){
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(){
         if(xhr.readyState == 4) {
@@ -168,8 +190,141 @@ function loadHomeNavBar(){
         }
     }
 
-    xhr.open("GET", "navbar.html");
+    xhr.open("GET", "host/navbar.html");
 
     xhr.send();
 }
 
+function loadHostDashboard(){
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            console.log("Ready!");
+            if(xhr.status === 200){
+                document.getElementById("main").innerHTML = xhr.responseText;
+
+                getAllReservations(function(reservations){
+                    reservations.filter(reservation => reservation.currentStatus === "PENDING")
+                        .forEach(populateReservationTableRow);
+                });
+
+                getIssues(function(issues){
+                    issues.forEach(populateIssuesTableRow);
+                });
+
+
+                $('#user').text(userSession.getLoggedInClient().username);
+                clearActiveNavBars();
+                $("#dashboardLink").addClass("is-active");
+            } else {
+                console.log("Something went wrong");
+            }
+        }
+    };
+
+    xhr.open("GET", "host/dashboard.html");
+
+    xhr.send();
+}
+
+function loadHostReservations(){
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            console.log("Ready!");
+            if(xhr.status === 200){
+                document.getElementById("main").innerHTML = xhr.responseText;
+
+                getAllReservations(function(reservations){
+                    reservations.forEach(populateHostReservationTableRow);
+                });
+
+                clearActiveNavBars();
+                $("#reservationsLink").addClass("is-active");
+            } else {
+                console.log("Something went wrong");
+            }
+        }
+    };
+
+    xhr.open("GET", "host/reservations.html");
+
+    xhr.send();
+}
+
+function loadHostIssues(){
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            console.log("Ready!");
+            if(xhr.status === 200){
+                document.getElementById("main").innerHTML = xhr.responseText;
+
+                getIssues(function(issues){
+                    issues.forEach(populateHostIssuesTableRow);
+                });
+
+                clearActiveNavBars();
+                $("#issuesLink").addClass("is-active");
+            } else {
+                console.log("Something went wrong");
+            }
+        }
+    };
+
+    xhr.open("GET", "host/issues.html");
+
+    xhr.send();
+}
+
+function loadHostHotelRooms(){
+    let xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            console.log("Ready!");
+            if(xhr.status === 200){
+                document.getElementById("main").innerHTML = xhr.responseText;
+
+                getAllHotelRooms(function(hotelRooms){
+                    hotelRooms.forEach(populateHotelRoomTableRow);
+                });
+
+                clearActiveNavBars();
+                $("#hotelRoomsLink").addClass("is-active");
+            } else {
+                console.log("Something went wrong");
+            }
+        }
+    };
+
+    xhr.open("GET", "host/hotelRooms.html");
+
+    xhr.send();
+
+}
+
+function loadGuestList(){
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){
+        if(xhr.readyState === 4) {
+            console.log("Ready!");
+            if(xhr.status === 200){
+                document.getElementById("main").innerHTML = xhr.responseText;
+
+                getAllGuests(function(guests){
+                    guests.forEach(populateGuestsTableRow);
+                });
+
+                clearActiveNavBars();
+                $("#guestListLink").addClass("is-active");
+            } else {
+                console.log("Something went wrong");
+            }
+        }
+    };
+
+    xhr.open("GET", "host/guests.html");
+
+    xhr.send();
+}

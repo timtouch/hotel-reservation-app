@@ -50,6 +50,10 @@ public class IssueServlet extends HttpServlet
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         ObjectMapper mapper = new ObjectMapper();
+
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         IssueDao issueDao = new IssueDao();
         Issue insertIssue;
 
@@ -68,7 +72,12 @@ public class IssueServlet extends HttpServlet
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         ObjectMapper mapper = new ObjectMapper();
+
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         IssueDao issueDao = new IssueDao();
+
 
         Issue updatedIssue;
 

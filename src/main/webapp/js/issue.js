@@ -27,9 +27,6 @@ function submitIssue(){
 
 }
 
-function updateIssue(){
-
-}
 
 function openIssueModal(){
     $("#issueForm.modal").toggle("is-active");
@@ -55,3 +52,74 @@ function populateIssuesTableRow(issue){
         </tr>`
     );
 }
+
+/**
+ * Populates an issues row for host view.
+ * Has a button that when pressed, sets the issue's resolve status to <code>true</code>
+ * @param issue
+ */
+function populateHostIssuesTableRow(issue){
+
+    let tableBody = document.getElementById('issues');
+    let tableRow = document.createElement('tr');
+
+    let tableData = document.createElement('td');
+    let tableText = document.createTextNode(issue.createdOn);
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    tableData = document.createElement('td');
+    tableText = document.createTextNode(issue.message);
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    tableData = document.createElement('td');
+    tableText = document.createTextNode(issue.resolverId !== 0 ? issue.resolverId : "");
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    tableData = document.createElement('td');
+    tableText = document.createTextNode(issue.resolverId !== 0 ? issue.resolverId : "");
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    tableData = document.createElement('td');
+    tableText = document.createTextNode(issue.resolved ? "RESOLVED" : "UNRESOLVED");
+    tableData.appendChild(tableText);
+    tableRow.appendChild(tableData);
+
+    if (!issue.resolved){
+        let buttonElement = document.createElement('button');
+        let btnTextNode = document.createTextNode('Resolve');
+
+        buttonElement.appendChild(btnTextNode);
+        buttonElement.addEventListener('click', function(){
+            resolveIssue(issue);
+        });
+
+        tableData = document.createElement('td');
+        tableData.appendChild(buttonElement);
+        tableRow.appendChild(tableData);
+    }
+
+
+    tableBody.appendChild(tableRow);
+
+
+}
+
+/**
+ * Takes an issue and resolves it
+ * @param issue
+ */
+function resolveIssue(issue){
+    let resolveDate = new Date(Date.now());
+
+    issue.resolverId = userSession.getLoggedInClient().userId;
+    issue.resolvedOn = resolveDate.toISOString();
+    issue.resolved = true;
+
+    updateIssue(issue);
+}
+
+
