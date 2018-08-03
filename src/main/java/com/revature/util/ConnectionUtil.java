@@ -14,13 +14,17 @@ public class ConnectionUtil
     public static Connection getConnection() throws SQLException, IOException
     {
 //        System.out.println(new File(".").getAbsolutePath());
-        Properties prop = new Properties();
-        InputStream in = new FileInputStream("../webapps/reservation-app/WEB-INF/connection.properties"); //"../webapps/reservation-app/connection.properties");
-        prop.load(in);
+//        Properties prop = new Properties();
+//        InputStream in = new FileInputStream("../webapps/reservation-app/WEB-INF/connection.properties"); //"../webapps/reservation-app/connection.properties");
+//        prop.load(in);
+//
+//        String url = prop.getProperty("url");
+//        String user = prop.getProperty("user");
+//        String password = prop.getProperty("password");
 
-        String url = prop.getProperty("url");
-        String user = prop.getProperty("user");
-        String password = prop.getProperty("password");
+        String url = "jdbc:oracle:thin:@localhost:1521:xe";
+        String user = "hoteldb";
+        String password = "hotelcalifornia";
 
         DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
         return DriverManager.getConnection(url, user, password);

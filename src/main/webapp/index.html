@@ -13,20 +13,50 @@
 
 </head>
 <body>
-    <nav id="navbar" class="navbar has-shadow" role="navigation" aria-label="main navigation"></nav>
+<nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
 
-    <main id="main"></main>
+        <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div class="navbar-menu" id="navMenu">
+        <div class="navbar-start">
+            <a class="navbar-item is-active" href="index.html">
+                Home
+            </a>
+        </div>
+        <div class="navbar-end">
+            <a class="navbar-item" href="authentication/register.html">
+                Register
+            </a>
+            <a class="navbar-item" href="authentication/login.html">
+                Login
+            </a>
+        </div>
+    </div>
+</nav>
 
+<section class="section">
+    <div id="replacethis" class="container">
+        <h1 class="title">
+            Welcome to the Hotel California.
+        </h1>
+        <p class="subtitle">
+            "Such a lovely place"
+        </p>
+        <a class="button" href="authentication/login.html">Login</a>
+        <a class="button" href="authentication/register.html">Register</a>
+    </div>
+</section>
 
+<script type="application/javascript" src="js/main.js"></script>
     <!-- jquery CDN -->
     <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
-    <script type="application/javascript" src="js/main.js"></script>
-    <script type="application/javascript" src="js/pageLoader.js"></script>
-    <script type="application/javascript" src="js/requestHandler.js"></script>
-    <script type="application/javascript" src="js/session.js"></script>
-
 </body>
 </html>
