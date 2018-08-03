@@ -1,26 +1,5 @@
 let apiEndpoint = "api/v1/";
 
-function sendRequest(){
-    let xhr = new XMLHttpRequest();
-    let guest = {
-
-    };
-
-    xhr.onreadystatechange = function(){
-        if(xhr.readyState == 4) {
-            if(xhr.status == 200){
-                console.log(xhr.response);
-            }
-        }
-    }
-    xhr.open("POST", "login");
-    xhr.setRequestHeader("Content-type", "application/json");
-
-    let json = JSON.stringify(guest);
-
-    xhr.send(json);
-}
-
 function getGuests(){
     let xhr = new XMLHttpRequest();
     let guests;
@@ -174,9 +153,10 @@ function registerNewUser(){
             } else {
                 console.log("I screwed up!");
             }
+            $(".is-info").removeClass('is-loading');
         }
     };
-
+    $("button.is-info").addClass('is-loading');
     xhr.open("POST", apiEndpoint + "guests");
     xhr.setRequestHeader("Content-type", "application/json");
 
@@ -196,7 +176,6 @@ function getAllHotelRooms(callback){
             if(xhr.status === 200){
                 try{
                     hotelRooms = JSON.parse(xhr.responseText);
-                    console.log(hotelRooms);
                     if (typeof callback === 'function'){
                         callback(hotelRooms);
                     }
@@ -211,7 +190,6 @@ function getAllHotelRooms(callback){
     };
 
     xhr.open("GET", apiEndpoint + "hotelRooms" + parameters);
-    // xhr.setRequestHeader("Content-type", "application/json");
 
     xhr.send();
 }

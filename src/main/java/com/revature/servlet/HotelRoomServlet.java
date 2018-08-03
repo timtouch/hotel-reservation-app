@@ -22,6 +22,7 @@ public class HotelRoomServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        System.out.println("GET hotelRooms");
         HotelRoomDao hotelRoomDao = new HotelRoomDao();
 
         List<HotelRoom> hotelRooms;
@@ -39,6 +40,7 @@ public class HotelRoomServlet extends HttpServlet
             } else
             {
                 hotelRooms = hotelRoomDao.getAllRoomsFromAHotel(Integer.parseInt(req.getParameter("hotelId")));
+                System.out.println(hotelRooms);
                 mapper.writeValue(resp.getOutputStream(), hotelRooms);
             }
         } else if (req.getParameterMap().containsKey("hotelRoomId"))

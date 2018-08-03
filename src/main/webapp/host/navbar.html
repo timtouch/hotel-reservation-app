@@ -1,0 +1,28 @@
+<div class="navbar-brand">
+    <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+    </a>
+</div>
+<div class="navbar-menu" id="navMenu">
+    <div class="navbar-start">
+        <a id="guestList" onclick="loadGuestList()" class="navbar-item" href="#guestList">
+            Guests
+        </a>
+        <a id="dashboard" onclick="loadHostDashboard()" class="navbar-item" href="#dashboard">
+            Dashboard
+        </a>
+        <a id="issues" onclick="loadHostIssues()" class="navbar-item" href="#issues">
+            Issues
+        </a>
+        <a id="reservations" onclick="loadHostReservations()" class="navbar-item" href="#dashboard">
+            Reservations
+        </a>
+    </div>
+    <div class="navbar-end">
+        <a id="logout" onclick="userSession.logout()" class="navbar-item" href="#logout">
+            Logout
+        </a>
+    </div>
+</div>

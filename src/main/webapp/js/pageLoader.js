@@ -12,7 +12,7 @@ function loadHomePage(callback){
                     callback();
                 }
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong");
             }
         }
     };
@@ -35,7 +35,7 @@ function loadLoginPage(){
                 $("#login").addClass("is-active");
 
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong");
             }
         }
     };
@@ -56,7 +56,7 @@ function loadRegisterPage(){
                 clearActiveNavBars();
                 $("#register").addClass("is-active");
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong");
             }
         }
     };
@@ -77,14 +77,14 @@ function loadGuestProfile(){
                 let htmlSection = xhr.responseText;
                 document.getElementById("main").innerHTML = htmlSection;
 
-                $('#username').addClass('title').text(userSession.getLoggedInClient().username);
-                $('#fullName').addClass('subtitle').text(`${userSession.getLoggedInClient().firstName} ${userSession.getLoggedInClient().lastName}`);
-                $('#email').addClass('subtitle').text(`${userSession.getLoggedInClient().email}`);
-
+                $('#username').text(userSession.getLoggedInClient().username);
+                $('#fullName').text(`${userSession.getLoggedInClient().firstName} ${userSession.getLoggedInClient().lastName}`);
+                $('#email').text(`${userSession.getLoggedInClient().email}`);
+                $('#role').text(`${userSession.getLoggedInClient().role}`);
                  clearActiveNavBars();
                 $("#profile").addClass("is-active");
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong");
             }
         }
     };
@@ -106,16 +106,22 @@ function loadGuestDashboard(){
                     reservations.forEach(populateReservationTableRow);
                 });
 
-                getIssues(function(reservations){
-                    reservations.forEach(populateIssuesTableRow);
+                getIssues(function(issues){
+                    issues.filter(issue => issue.createdById === userSession.getLoggedInClient().userId)
+                        .forEach(populateIssuesTableRow);
                 });
 
-                $('#user').text(userSession.getLoggedInClient().username);
+                getAllHotelRooms(function(hotelRooms){
+                    hotelRooms.forEach(populateSelectHotelRoom);
+                    addOptionEventHandler();
+                });
 
+
+                $('#user').text(userSession.getLoggedInClient().username);
                 clearActiveNavBars();
                 $("#dashboard").addClass("is-active");
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong");
             }
         }
     };
@@ -125,8 +131,6 @@ function loadGuestDashboard(){
     xhr.send();
 }
 
-
-
 function loadGuestNavBar(){
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(){
@@ -135,9 +139,10 @@ function loadGuestNavBar(){
             if(xhr.status == 200){
                 let htmlSection = xhr.responseText;
                 document.getElementById("navbar").innerHTML = htmlSection;
+                addNavBarBurgerToggle();
                 clearActiveNavBars();
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong");
             }
         }
     }
@@ -155,9 +160,10 @@ function loadHomeNavBar(){
             if(xhr.status == 200){
                 let htmlSection = xhr.responseText;
                 document.getElementById("navbar").innerHTML = htmlSection;
+                addNavBarBurgerToggle();
                 clearActiveNavBars();
             } else {
-                console.log("I screwed up!");
+                console.log("Something went wrong");
             }
         }
     }
@@ -167,34 +173,3 @@ function loadHomeNavBar(){
     xhr.send();
 }
 
-/**
- * Populates a reservation table row
- * @param reservation
- */
-function populateReservationTableRow(reservation){
-    $('#reservations').append(
-        `<tr>
-            <td>${reservation.hotelRoomId}</td>
-            <td>${reservation.numOfGuests}</td>
-            <td>${reservation.startDate}</td>
-            <td>${reservation.endDate}</td>
-            <td>${reservation.currentStatus}</td>
-        </tr>`
-    );
-}
-
-/**
- * Populates an issues table row
- * @param issue
- */
-function populateIssuesTableRow(issue){
-    $('#issues').append(
-        `<tr>
-            <td>${issue.createdOn}</td>
-            <td>${issue.message}</td>
-            <td>${issue.resolverId !== 0 ? issue.resolverId : ""}</td>
-            <td>${issue.resolvedOn ? issue.resolvedOn : ""}</td>
-            <td>${issue.isResolved ? "RESOLVED" : "UNRESOLVED"}</td>
-        </tr>`
-    );
-}

@@ -4,6 +4,11 @@ $(document).ready(function() {
     loadHomePage();
 
 
+
+
+});
+
+function addNavBarBurgerToggle(){
     // Check for click events on the navbar burger icon
     $(".navbar-burger").click(function() {
 
@@ -12,8 +17,7 @@ $(document).ready(function() {
         $(".navbar-menu").toggleClass("is-active");
 
     });
-
-});
+}
 
 let hotel = {
     hotelId: 1,
@@ -24,12 +28,14 @@ function clearActiveNavBars(){
     $(".navbar-item").removeClass("is-active");
 }
 
+
 /**
- *
+ * Gives each <option> an onclick event that adds a class to it
  */
-function openModal(){
-    $(".modal").addClass("is-active");
-    $(".modal-close").click(function(){
-       $(".modal").removeClass("is-active");
+function addOptionEventHandler(){
+    $('option').click(function(){
+        $('option').removeClass("selected");
+        $(this).addClass("selected");
     });
 }
+

@@ -1,10 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<section class="hero is-info welcome is-small">
+    <div class="hero-body">
+        <h1 class="title">
+            Hello, <span id="user"></span>
+        </h1>
+        <h2 class="subtitle">
+            Manage your hotel as the host.
+        </h2>
+    </div>
+</section>
+<section class="hero">
+    <div class="hero-body">
+        <div class="columns">
+            <div class="column card is-6">
+                <header class="card-header">
+                    <p class="card-header-title">Reservations</p>
+                </header>
+                <table class="table card-content">
+                    <thead>
+                    <tr>
+                        <th>Hotel Room ID</th>
+                        <th>Number of Guests</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reservation Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="reservations">
+                    <!--<tr><td></td></tr>-->
+                    </tbody>
+                </table>
+                <button class="button" onclick="openReservationModal()">Make Reservation</button>
+            </div>
+            <div class="column card is-6">
+                <header class="card-header">
+                    <p class="card-header-title">Submitted Issues</p>
+                </header>
+                <table class="table card-content">
+                    <thead>
+                    <tr>
+                        <th>Created On</th>
+                        <th>Message</th>
+                        <th>Resolved By</th>
+                        <th>Resolved On</th>
+                        <th>Is Resolved</th>
+                    </tr>
+                    </thead>
+                    <tbody id="issues">
+                    <!--<tr><td></td></tr>-->
+                    </tbody>
+                </table>
+                <button class="button" onclick="openIssueModal()">Create Issue</button>
+            </div>
+            <div id="reservationForm" class="modal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Create Reservation</p>
+                        <button class="delete" aria-label="close" onclick="closeReservationModal()"></button>
+                    </header>
+                    <section class="modal-card-body">
+                        <!-- Content ... -->
+                        <label class="label">Hotel Room Number</label>
+                        <div class="select is-rounded">
+                            <select id="selectHotelRooms">
+                                <option>Select Hotel Room</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label" for="startDate">Start Date</label>
+                            <input class="input" type="date" id="startDate"
+                                   min="2018-01-01" max="2018-12-31"/>
+                        </div>
 
-</body>
-</html>
+                        <div>
+                            <label class="label" for="endDate">End Date</label>
+                            <input class="input" type="date" id="endDate"
+                                   min="2018-01-01" max="2018-12-31"/>
+                        </div>
+                        <label class="label">Number of guests</label>
+                        <input class="input" type="number" id="numOfGuests" value="1" min="1">
+                        <!-- End Content -->
+                    </section>
+                    <footer class="modal-card-foot">
+                        <button class="button is-success" onclick="submitReservation()">Submit</button>
+                        <button class="button" onclick="closeReservationModal()">Cancel</button>
+                    </footer>
+                </div>
+            </div>
+            <div id="issueForm" class="modal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Raise Issue</p>
+                        <button class="delete" aria-label="close" onclick="closeIssueModal()"></button>
+                    </header>
+                    <section class="modal-card-body">
+                        <!-- Content ... -->
+                        <p id="errorMessage" class="help is-danger"></p>
+                        <label class="label">What seems to be the problem?</label>
+                        <div class="field">
+                            <div class="control">
+                                <textarea id="message" class="textarea is-large"
+                                          placeholder="Describe issue here"></textarea>
+                            </div>
+                        </div>
+                    </section>
+                    <footer class="modal-card-foot">
+                        <button class="button is-success" onclick="submitIssue()">Submit Issue</button>
+                        <button class="button" onclick="closeIssueModal()">Cancel</button>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

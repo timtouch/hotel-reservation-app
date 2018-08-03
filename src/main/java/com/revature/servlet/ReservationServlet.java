@@ -77,6 +77,7 @@ public class ReservationServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        System.out.println("POST reservation");
         ObjectMapper mapper = new ObjectMapper();
         ReservationDao reservationDao = new ReservationDao();
 
